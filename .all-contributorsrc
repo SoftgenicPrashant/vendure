@@ -1,0 +1,108 @@
+{
+  "projectName": "@vuestorefront/vendure",
+  "projectOwner": "vuestorefront",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 80,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Baroshem",
+      "name": "Jakub Andrzejewski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37120330?v=4",
+      "profile": "https://github.com/Baroshem",
+      "contributions": [
+        "code",
+        "maintenance",
+        "projectManagement",
+        "doc"
+      ]
+    },
+    {
+      "login": "rglepper",
+      "name": "Rafael Garcia Lepper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73605?v=4",
+      "profile": "https://rafagarcialepper.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "michaelbromley",
+      "name": "Michael Bromley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6275952?v=4",
+      "profile": "http://www.michaelbromley.co.uk/",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "Fifciu",
+      "name": "Filip Jędrasik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30155292?v=4",
+      "profile": "https://fifciuu.com/",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "Mateuszpietrusinski",
+      "name": "Mateusz Pietrusiński",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24594740?v=4",
+      "profile": "https://github.com/Mateuszpietrusinski",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "igorwojciechowski",
+      "name": "igorwojciechowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26794636?v=4",
+      "profile": "https://github.com/igorwojciechowski",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "bloodf",
+      "name": "Heitor Ramon Ribeiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1626923?v=4",
+      "profile": "https://heitor.co/",
+      "contributions": [
+        "mentoring"
+      ]
+    },
+    {
+      "login": "zmilan",
+      "name": "Milan Zivkovic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/302135?v=4",
+      "profile": "https://www.malimlin.si/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Michaeldrm",
+      "name": "michael.douglas@outlook.com",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4975044?v=4",
+      "profile": "https://github.com/Michaeldrm",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "justyna-13",
+      "name": "Justyna",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46591755?v=4",
+      "profile": "https://github.com/justyna-13",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 5
+}
