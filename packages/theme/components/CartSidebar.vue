@@ -9,7 +9,7 @@
     >
       <template #content-top>
         <SfProperty
-          v-if="totalItems"
+          
           class="sf-property--large cart-summary desktop-only"
           :name="$t('Total items')"
           :value="totalItems"
@@ -23,8 +23,11 @@
                 v-for="product in products"
                 v-e2e="'collected-product'"
                 :key="cartGetters.getItemSku(product)"
-                :image="cartGetters.getItemImage(product)"
+                    image="/assets/storybook/Home/productB.jpg"
+                    :imageWidth="140"
+                    :imageHeight="100"
                 :title="cartGetters.getItemName(product)"
+                
                 :regular-price="$n(cartGetters.getItemPrice(product).regular, 'currency')"
                 :special-price="cartGetters.getItemPrice(product).special && $n(cartGetters.getItemPrice(product).special, 'currency')"
                 :stock="99999"
@@ -60,7 +63,7 @@
             <SfImage
               :alt="$t('Empty bag')"
               class="empty-cart__image"
-              src="/icons/empty-cart.svg"
+              src="/icons/empty-cart1.svg"
             />
             <SfHeading
               :title="$t('Your cart is empty')"
@@ -72,11 +75,9 @@
         </div>
       </transition>
       <template #content-bottom>
-        <transition name="sf-fade">
-          <div v-if="totalItems">
-            <SfProperty
-              :name="$t('Subtotal price')"
-              class="sf-property--full-width sf-property--large my-cart__total-price"
+                  <SfProperty
+              :name="$t('Total price')"
+              class=" sf-property--large my-cart__total-price"
             >
               <template #value>
                 <SfPrice
@@ -84,10 +85,14 @@
                 />
               </template>
             </SfProperty>
+        <transition name="sf-fade">
+          <div v-if="totalItems">
+  
             <nuxt-link :to="localePath({ name: 'customer' })">
               <SfButton
                 v-e2e="'go-to-checkout-btn'"
-                class="sf-button--full-width color-secondary"
+                class="sf-button--full-width"
+                style="background: #6C227E;"
                 @click="toggleCartSidebar"
               >
                 {{ $t('Go to checkout') }}
@@ -96,7 +101,7 @@
           </div>
           <div v-else>
             <SfButton
-              class="sf-button--full-width color-primary"
+              class="sf-button--full-width color-secondary"
               @click="toggleCartSidebar"
             >{{ $t('Go back shopping') }}</SfButton
             >
@@ -189,7 +194,7 @@ export default {
 .empty-cart {
   --heading-description-margin: 0 0 var(--spacer-xl) 0;
   --heading-title-margin: 0 0 var(--spacer-xl) 0;
-  --heading-title-color: var(--c-primary);
+  --heading-title-color: #6C227E;
   --heading-title-font-weight: var(--font-weight--semibold);
   display: flex;
   flex: 1;
@@ -218,12 +223,23 @@ export default {
   flex: 1;
 }
 .collected-product {
+  background: #FFFFFF;
+  box-shadow: 0px 4px 11px rgba(29, 31, 34, 0.1);
+border-radius: 8px;
+/* Pop-up Elevation */
+::v-deep .sf-image{
+  display: none;
+}
+::v-deep .sf-image--placeholder{
+  display: none;
+}
+
   margin: 0 0 var(--spacer-sm) 0;
   &__properties {
     margin: var(--spacer-xs) 0 0 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-start;
     flex: 2;
     &:first-child {
@@ -257,4 +273,5 @@ export default {
     }
   }
 }
+
 </style>
