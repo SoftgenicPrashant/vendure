@@ -13,12 +13,29 @@
       <template #navigation>
         <div class="sf-header__navigation desktop" v-if="!isMobile">
           <SfHeaderNavigationItem
+            class="nav-item"
+            v-e2e="`app-header-${home}`"
+            :label="`home`"
+            :link="localePath(`/`)"
+          />
+        </div>
+            <div class="sf-header__navigation desktop" v-if="!isMobile">
+          <SfHeaderNavigationItem
             v-for="category in headerNavigation"
             :key="category.name"
             class="nav-item"
             v-e2e="`app-header-${category.name}`"
             :label="category.name"
             :link="localePath(`/c/${category.link}`)"
+          />
+          
+        </div>
+                <div class="sf-header__navigation desktop" v-if="!isMobile">
+          <SfHeaderNavigationItem
+            class="nav-item"
+            v-e2e="`app-header-${my-order}`"
+            :label="`my-order`"
+            :link="localePath(`/`)"
           />
         </div>
         <SfModal v-else :visible="isMobileMenuOpen" :title="$t('Menu')" @close="toggleMobileMenu">
@@ -286,7 +303,8 @@ export default {
   z-index: 2;
 }
 .nav-item {
-  --header-navigation-item-margin: 0 var(--spacer-base);
+
+  text-align: left;
 }
 
 .cart-badge {

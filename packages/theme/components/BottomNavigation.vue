@@ -9,7 +9,7 @@
         @click="handleHomeClick"
       />
     <SfBottomNavigationItem icon="menu" size="20px" :label="$t('Menu')" @click="toggleMobileMenu"/>
-    <SfBottomNavigationItem icon="heart" size="20px" :label="$t('Wishlist')" @click="toggleWishlistSidebar"/>
+    <SfBottomNavigationItem icon="M19.2813 9.53172L14.7292 3.02822C13.9549 1.92405 12.7223 1.33377 11.4723 1.33377C10.6875 1.33377 9.8924 1.56641 9.19795 2.05252C8.51392 2.53169 8.02781 3.19142 7.75698 3.92059C7.65628 1.86155 5.97225 0.222656 3.88891 0.222656C1.73959 0.222656 0 1.96225 0 4.11156V11.8894C0 14.0387 1.73959 15.7783 3.88891 15.7783C6.03822 15.7783 7.77781 14.0387 7.77781 11.8894V6.71227C7.89239 7.01088 8.03128 7.30602 8.22226 7.58033L12.7778 14.0838C13.5487 15.188 14.7813 15.7783 16.0348 15.7783C16.823 15.7783 17.6147 15.5456 18.3091 15.0595C20.1042 13.8026 20.5383 11.3269 19.2813 9.53172ZM5.55558 8.00047H2.22223V4.11156C2.22223 3.19142 2.96876 2.44489 3.88891 2.44489C4.80905 2.44489 5.55558 3.19142 5.55558 4.11156V8.00047ZM12.3195 9.5595L10.0417 6.30601C9.77435 5.92407 9.67018 5.45879 9.75351 5.00045C9.83337 4.54212 10.0903 4.13934 10.4723 3.87198C10.7674 3.66364 11.1146 3.556 11.4723 3.556C12.0452 3.556 12.5799 3.83378 12.9063 4.30253L15.1841 7.55602L12.3195 9.5595Z" size="20px" :label="$t('Wishlist')" @click="toggleWishlistSidebar"/>
     <SfBottomNavigationItem icon="profile" size="20px" :label="$t('Account')" @click="handleAccountClick"/>
     <!-- TODO: add logic for label - if on Home then Basket, if on PDC then AddToCart etc. -->
     <SfBottomNavigationItem
@@ -68,5 +68,8 @@ export default {
 <style lang="scss" scoped>
 .navigation-bottom {
   --bottom-navigation-z-index: 3;
+}
+.sf-circle-icon{
+  background: #6C227E;
 }
 </style>

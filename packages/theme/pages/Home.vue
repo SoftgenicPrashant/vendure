@@ -78,7 +78,7 @@
         description="Be aware of upcoming sales and events. Receive gifts and special offers!"
         image="/homepage/newsletter.webp"
         class="call-to-action"
-        button="test"
+        button-text="subscribe"
       />
       
     </LazyHydrate>
@@ -141,6 +141,7 @@ export default {
       {
         title: 'For all of your pharmaceutical needs!',
         subtitle: 'National Apothecary Solutions',
+        
         background: '#eceff1',
         image: '/homepage/photo.png'
       },
@@ -162,7 +163,7 @@ export default {
         title: 'ACETAZOLAMIDE 125 MG TAB 100',
         subtitle: 'EYWA PHARMA INC',
         background: '#fce4ec',
-        image: '/homepage/ImageMask.png'
+        image: '/homepage/banner3.jpg'
       }
     ];
     const banners = [
@@ -242,6 +243,9 @@ export default {
   margin: var(--spacer-xl) auto var(--spacer-lg);
   --hero-item-background-position: center;
   @include for-desktop {
+      ::v-deep .sf-hero-item__button .sf-button{
+      background: #6C227E;
+    }
     margin: var(--spacer-xl) auto var(--spacer-2xl);
     ::v-deep .sf-hero-item__subtitle{
       font-style: normal;
@@ -256,7 +260,12 @@ export default {
       font-size: 52px;
       line-height: 48px;
       color: #F1F2F3;
+      
     }
+    
+  ::v-deep .sf-bullets .sf-button {
+    background: #6C227E;
+  }
   }
   .sf-hero-item {
     &:nth-child(even) {
@@ -354,24 +363,35 @@ margin-top: 6rem;
     --image-height: 1.375rem;
     --image-width: 9.375rem;
     object-fit: cover;
-    @include for-desktop {
-      --image-width: 13.125rem;
-      --image-height: 3.75rem;
-    }
+    // @include for-desktop {
+    //   --image-width: 9.125rem;
+    //   --image-height: 3.75rem;
+    // }
   }
-.sf-product-card__add-button{
-margin-top: 4rem !important;
-}
-.sf-circle-icon {
-  margin-top: 4rem !important;
-}
+
 .call-to-action {
   background-position: right;
   margin: var(--spacer-xs) 0;
   @include for-desktop {
+          ::v-deep .sf-button{
+      background: #6C227E;
+    }
     margin: var(--spacer-xl) 0 var(--spacer-2xl) 0;
+
   }
+    @include for-mobile {
+          ::v-deep .sf-button{
+      background: #6C227E;
+    }
+  
+
+  }
+  .sf-call-to-action__button .sf-button{
+    background-color: #6C227E !important;
+  }
+ 
 }
+
 
 .carousel {
     margin: 1rem calc(-1 * var(--spacer-sm)) 0 0;

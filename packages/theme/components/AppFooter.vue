@@ -1,12 +1,12 @@
 <template>
   <SfFooter :column="4" multiple class="footer">
-    <SfFooterColumn :title="$t('About us')">
+    <SfFooterColumn :title="$t('Top Rated Products')">
       <SfList>
         <SfListItem>
             <router-link to="/page/about" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Who we are')"
+                :label="$t('My Orders')"
               />
             </router-link>
           </SfListItem>
@@ -14,7 +14,7 @@
             <router-link to="/page/quality" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Quality in the details')"
+                :label="$t('Returns, Claims & Recalls')"
               />
             </router-link>
           </SfListItem>
@@ -22,13 +22,29 @@
             <router-link to="/page/reviews" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Customer reviews')"
+                :label="$t('My Invoices')"
+              />
+            </router-link>
+          </SfListItem>
+            <SfListItem>
+            <router-link to="/page/reviews" exact>
+              <SfMenuItem
+                class="sf-footer__menu-item"
+                :label="$t('Recieving')"
+              />
+            </router-link>
+          </SfListItem>
+           <SfListItem>
+            <router-link to="/page/reviews" exact>
+              <SfMenuItem
+                class="sf-footer__menu-item"
+                :label="$t('Settings & Preferences')"
               />
             </router-link>
           </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Departments')">
+    <SfFooterColumn :title="$t('Resources')">
       <SfList>
         <SfListItem
           v-for="item in departments"
@@ -88,6 +104,7 @@
           </SfListItem>
       </SfList>
     </SfFooterColumn>
+    
     <SfFooterColumn title="Social">
       <div class="footer__socials">
         <SfImage class="footer__social-image" v-for="item in social" :key="item" :src="'/icons/'+item+'.svg'" :alt="item" width="32" height="32" />
@@ -102,7 +119,7 @@
         aria-label="button"
       >
         <SfImage
-          src="/assets/storybook/SfFooter/flag.png"
+          src="/icons/flag.png"
           alt="flag of the USA"
           :width="20"
           :height="20"
@@ -110,24 +127,35 @@
         English
       </button>
     </SfFooterColumn>
-        <SfFooterColumn class="desktop-only">
-      <div style="display:flex">
+    <SfFooterColumn class="desktop-only" >
+      <router-link to="/" exact>
+      <img src="/icons/flogo.png" 
+      />
+      </router-link>
+      <br></br>
+      <div style="display:flex;" class="subscribe-mail">
         <SfInput
           class="sf-input--outline"
           type="text"
           placeholder="Type your email address"
-          inner-width="100%"
+          
         />
+
+
+      </div>
+    </SfFooterColumn>
+    <SfFooterColumn class="desktop-only subscribe-btn" >
         <button
           class="sf-button"
           :aria-disabled="false"
           :link="null"
           type="button"
           aria-label="button"
+          
+          
         >
           Subscribe
         </button>
-      </div>
     </SfFooterColumn>
   </SfFooter>
 </template>
@@ -158,6 +186,7 @@ export default {
   margin-bottom: 3.75rem;
   @include for-desktop {
     margin-bottom: 0;
+
   }
   &__socials {
     display: flex;
@@ -176,16 +205,39 @@ export default {
 }
 .sf-footer {
   @include for-desktop {
-    border-top: var(--spacer-xs) solid var(--c-primary);
+    border-top: var(--spacer-xs) solid #6C227E;
     padding-bottom: 0;
     margin-top: var(--spacer-2xl);
+ 
   }
   &__container {
     margin: var(--spacer-sm);
     @include for-desktop {
       max-width: 69rem;
       margin: 0 auto;
+ 
     }
   }
+}
+ .subscribe-mail .sf-input input{
+  height: 30px;
+  border: #6C227E !important;
+  color: antiquewhite;
+}
+ .subscribe-mail .sf-input input:focus {
+  border:1px solid #6C227E;
+  outline: none;
+  box-shadow:0px 0px 3px #6C227E;
+  border-radius: 0;
+}
+.subscribe-mail .sf-input__bar{
+  background: #6C227E;
+  color: #6C227E;
+  --icon-colo:#6C227E;
+}
+  .subscribe-btn .sf-button{
+  background-color: #6C227E;
+  height: 30px;
+  margin-top: 3.5rem;
 }
 </style>
