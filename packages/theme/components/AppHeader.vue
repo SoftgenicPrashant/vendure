@@ -298,6 +298,16 @@ export default {
   &__logo-image {
       height: 100%;
   }
+::v-deep .sf-header-navigation-item__item--desktop > *:not(.sf-mega-menu){
+  font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+}
+::v-deep .sf-header-navigation-item:hover > *:not(.sf-mega-menu) {
+    --header-navigation-item-color: #6C227E;
+    --header-navigation-item-border-color:#6C227E;
+}
 }
 .header-on-top {
   z-index: 2;

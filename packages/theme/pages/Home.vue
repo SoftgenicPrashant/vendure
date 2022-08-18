@@ -178,7 +178,7 @@ export default {
           mobile: '/homepage/img1.png',
           desktop: '/homepage/img1.png'
         },
-        class: 'sf-banner--slim desktop-only',
+        class: 'sf-banner--slim banner__start desktop-only',
         link: $config.theme.home.bannerA.link
       },
       {
@@ -188,7 +188,7 @@ export default {
         description:
             'This is an example of a banner for promoting a special product',
         buttonText: 'Shop now',
-        image: '/homepage/img1.png',
+        image: '/homepage/med1.png',
         class: 'sf-banner--slim banner-central desktop-only',
         link: $config.theme.home.bannerB.link
       },
@@ -308,13 +308,24 @@ export default {
 }
 
 .banner {
+  &__start{
+        ::v-deep .sf-banner__title{
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 48px;
+        display: inline;
+      
+    }
+
+  }
   &__tshirt {
     background-position: left;
     
            ::v-deep .sf-banner__title{
         font-style: normal;
         font-weight: 700;
-        font-size: 36px;
+        font-size: 26px;
         line-height: 48px;
         display: inline;
       
@@ -324,11 +335,15 @@ export default {
   }
   &-central {
     @include for-desktop {
+      ::v-deep .sf-banner{
+          width:10% !important;
+        }
+      
       --banner-container-flex: 0 0 70%;
              ::v-deep .sf-banner__title{
         font-style: normal;
         font-weight: 700;
-        font-size: 36px;
+        font-size: 30px;
         line-height: 48px;
         display: flex;
       
