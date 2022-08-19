@@ -112,12 +112,13 @@
             :show-add-to-cart-button="true"
             
             class="products__product-card"
-            @click:wishlist="toggleWishlist(i)"
+            @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
             > 
             {{`">
             CUSTOM TITLE
           `}}
          </SfProductCard>
+
         </transition-group>
         <transition-group
           v-else
@@ -388,10 +389,13 @@
         </div>
       </template>
     </SfSidebar>
+    </div>
   </div>
+  
 </template>
 <script>
 import {
+  SfModal,
   SfHeading,
   SfSidebar,
   SfButton,
@@ -413,6 +417,7 @@ import {
 export default {
   name: "Category",
   components: {
+    SfModal,
     SfHeading,
     SfButton,
     SfSidebar,
@@ -730,7 +735,9 @@ export default {
     },
   },
 };
+     
 </script>
+
 <style lang="scss" scoped>
 @import "~@storefront-ui/vue/styles";
 #category {
