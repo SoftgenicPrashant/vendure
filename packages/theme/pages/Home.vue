@@ -15,8 +15,33 @@
         />
       </SfHero>
     </LazyHydrate>
-<div style="display: flex;justify-content: center;align-items: center;padding: 0;">
-  <img src="/homepage/card.png" style="width: 100%;" />
+<div class="catcard">
+<template>
+  <SfCategoryCard
+    label="Personal Care"
+    count="32"
+    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    link="#"
+  />
+    <SfCategoryCard
+    label="Personal Care"
+    count="32"
+    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    link="#"
+  />
+     <SfCategoryCard
+    label="Personal Care"
+    count="32"
+    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    link="#"
+  />
+     <SfCategoryCard
+    label="Personal Care"
+    count="32"
+    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    link="#"
+  />
+</template>
 </div>
     <LazyHydrate when-visible>
       <SfBannerGrid :banner-grid="1" class="banner-grid">
@@ -103,7 +128,8 @@ import {
   SfBannerGrid,
   SfHeading,
   SfArrow,
-  SfButton
+  SfButton,
+  SfCategoryCard
 } from '@storefront-ui/vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -132,7 +158,8 @@ export default {
     SfHeading,
     SfArrow,
     SfButton,
-    LazyHydrate
+    LazyHydrate,
+    SfCategoryCard
   },
   setup() {
 
@@ -175,8 +202,8 @@ export default {
             'This is an example of a banner for promoting a special product',
         buttonText: 'Shop now',
         image: {
-          mobile: '/homepage/img1.png',
-          desktop: '/homepage/img1.png'
+          mobile: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000',
+          desktop: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000'
         },
         class: 'sf-banner--slim banner__start desktop-only',
         link: $config.theme.home.bannerA.link
@@ -188,7 +215,7 @@ export default {
         description:
             'This is an example of a banner for promoting a special product',
         buttonText: 'Shop now',
-        image: '/homepage/med1.png',
+        image: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000',
         class: 'sf-banner--slim banner-central desktop-only',
         link: $config.theme.home.bannerB.link
       },
@@ -196,7 +223,7 @@ export default {
         slot: 'banner-C',
         subtitle: 'ACCU-CHECK AVIVA PLUS ',
         title: 'Test Strips',
-        image: '/homepage/Image.png',
+        image: 'https://media.istockphoto.com/photos/urine-test-strips-picture-id1074268776?k=20&m=1074268776&s=170667a&w=0&h=STI2HogMOG3zu9sjAb3Tl5F_5NsuJADqtGc338dfFtU=',
         class: 'sf-banner--slim banner__tshirt',
         link: $config.theme.home.bannerC.link
       },
@@ -204,7 +231,7 @@ export default {
         slot: 'banner-D',
         subtitle: 'ALL BRANDS',
         title: 'ABACAVIR',
-        image: '/homepage/ImageMask.png',
+        image: '/homepage/b1.jpeg',
         class: 'sf-banner--slim',
         link: $config.theme.home.bannerD.link
       }
@@ -229,20 +256,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#layout{
+  @include for-desktop{
+    padding: 0 !important;
+    width: 100%;
+  }
+}
 #home {
   box-sizing: border-box;
   padding: 0 var(--spacer-sm);
   @include for-desktop {
     max-width: 1240px;
+    
     padding: 0;
     margin: 0 auto;
   }
 }
 
 .hero {
+  
   margin: var(--spacer-xl) auto var(--spacer-lg);
   --hero-item-background-position: center;
   @include for-desktop {
+    ::v-deep .sf-hero .hero{
+      width: 100%;
+    }
       ::v-deep .sf-hero-item__button .sf-button{
       background: #6C227E;
     }
@@ -428,5 +466,21 @@ margin-top: 6rem;
      transform-origin: center;
   }
 }
-
+.catcard{
+  @include for-desktop{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  ::v-deep .sf-category-card__details{
+    background-color: #6C227E;
+  }
+  @include for-mobile{
+        justify-content: center;
+        align-items: center;
+        
+     ::v-deep .sf-category-card__details{
+    background-color: #6C227E;
+  }
+  }
+}
 </style>

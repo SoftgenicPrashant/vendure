@@ -4,21 +4,21 @@
       <div class="grid__row">
         <div class="grid__col">
           <SfImage v-if="isMobile" src="/homepage/m1.png" alt="katherina_trn" :width="160" :height="160">katherina_trn</SfImage>
-          <SfImage v-else src="/homepage/m1.png" alt="katherina_trn" :width="470" :height="470">katherina_trn</SfImage>
+          <SfImage v-else src="/homepage/b3.jpeg" alt="katherina_trn" :width="470" :height="470">katherina_trn</SfImage>
         </div>
         <div class="grid__col small">
           <SfImage v-if="isMobile" src="/homepage/m2.png" alt="katherina_trn" :width="160" :height="160">katherina_trn</SfImage>
-          <SfImage v-else src="/homepage/m2.png" alt="katherina_trn" :width="470" :height="160">katherina_trn</SfImage>
+          <SfImage v-else src="/homepage/b4.jpeg" alt="katherina_trn" :width="470" :height="160">katherina_trn</SfImage>
         </div>
       </div>
       <div class="grid__row">
         <div class="grid__col small">
           <SfImage v-if="isMobile" src="/homepage/m3.png" alt="katherina_trn" :width="160" :height="160">katherina_trn</SfImage>
-           <SfImage v-else src="/homepage/m3.png" alt="katherina_trn" :width="470" :height="160">katherina_trn</SfImage>
+           <SfImage v-else src="/homepage/row-1-column-1.jpg" alt="katherina_trn" :width="470" :height="160">katherina_trn</SfImage>
         </div>
         <div class="grid__col">
           <SfImage v-if="isMobile" src="/homepage/m4.png" alt="katherina_trn" :width="160" :height="160">katherina_trn</SfImage>
-          <SfImage v-else src="/homepage/m4.png" alt="katherina_trn" :width="470" :height="470">katherina_trn</SfImage>
+          <SfImage v-else src="/homepage/row-2-column-1.jpg" alt="katherina_trn" :width="470" :height="470">katherina_trn</SfImage>
         </div>
       </div>
     </div>
