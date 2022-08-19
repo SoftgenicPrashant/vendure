@@ -163,7 +163,7 @@ export default {
         title: 'ACETAZOLAMIDE 125 MG TAB 100',
         subtitle: 'EYWA PHARMA INC',
         background: '#fce4ec',
-        image: '/homepage/banner3.jpg'
+        image: '/homepage/hero2.png'
       }
     ];
     const banners = [
