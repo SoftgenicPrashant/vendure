@@ -56,13 +56,13 @@
         </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Help')">
+    <SfFooterColumn :title="$t('Customer Support')">
       <SfList>
         <SfListItem>
             <router-link to="/page/customer" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Customer service')"
+                :label="$t('Mobile App')"
               />
             </router-link>
           </SfListItem>
@@ -70,7 +70,7 @@
             <router-link to="/page/size" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Size guide')"
+                :label="$t(`FAQ's`)"
               />
             </router-link>
           </SfListItem>
@@ -84,7 +84,7 @@
           </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn :title="$t('Payment & Delivery')">
+    <SfFooterColumn :title="$t('Legal')">
       <SfList>
         <SfListItem>
             <router-link to="/page/terms" exact>
@@ -98,7 +98,7 @@
             <router-link to="/page/guarantee" exact>
               <SfMenuItem
                 class="sf-footer__menu-item"
-                :label="$t('Guarantee')"
+                :label="$t('Privacy Policy')"
               />
             </router-link>
           </SfListItem>
@@ -172,7 +172,7 @@ export default {
   },
   data() {
     return {
-      departments: ['Women fashion', 'Men fashion', 'Kidswear', 'Home'],
+      departments: ['Drug SupplyChain Security', 'Act-DSCSA', 'FDA DRUG Shortage', 'Safety Data Sheet'],
       social: ['facebook', 'pinterest', 'google', 'twitter', 'youtube'],
       isMobile: false,
       desktopMin: 1024
