@@ -20,25 +20,25 @@
   <SfCategoryCard
     label="Personal Care"
     count="32"
-    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    :background='{"mobile":"/homepage/tabs.jpg","desktop":"/homepage/tabs.jpg"}'
     link="#"
   />
     <SfCategoryCard
     label="Personal Care"
     count="32"
-    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    :background='{"mobile":"/homepage/tabs.jpg","desktop":"/homepage/tabs.jpg"}'
     link="#"
   />
      <SfCategoryCard
     label="Personal Care"
     count="32"
-    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    :background='{"mobile":"/homepage/tabs.jpg","desktop":"/homepage/tabs.jpg"}'
     link="#"
   />
      <SfCategoryCard
     label="Personal Care"
     count="32"
-    :background='{"mobile":"/homepage/ImageMask1.png","desktop":"/homepage/ImageMask1.png"}'
+    :background='{"mobile":"/homepage/tabs.jpg","desktop":"/homepage/tabs.jpg"}'
     link="#"
   />
 </template>
@@ -112,7 +112,7 @@
       <InstagramFeed />
     </LazyHydrate>
     <div>
-      <img src="/homepage/bannerbottom.png"/>
+      <MobileStoreBannerVue />
     </div>
   </div>
 </template>
@@ -132,6 +132,7 @@ import {
   SfCategoryCard
 } from '@storefront-ui/vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
+import MobileStoreBannerVue from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import cacheControl from './../helpers/cacheControl';
 import { useContext, computed } from '@nuxtjs/composition-api';
@@ -159,7 +160,8 @@ export default {
     SfArrow,
     SfButton,
     LazyHydrate,
-    SfCategoryCard
+    SfCategoryCard,
+    MobileStoreBannerVue
   },
   setup() {
 
@@ -190,7 +192,7 @@ export default {
         title: 'ACETAZOLAMIDE 125 MG TAB 100',
         subtitle: 'EYWA PHARMA INC',
         background: '#fce4ec',
-        image: '/homepage/hero2.png'
+        image: '/homepage/hero1.jpg'
       }
     ];
     const banners = [
@@ -202,8 +204,8 @@ export default {
             'This is an example of a banner for promoting a special product',
         buttonText: 'Shop now',
         image: {
-          mobile: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000',
-          desktop: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000'
+          mobile: '/homepage/pills1.png',
+          desktop: '/homepage/pills1.png'
         },
         class: 'sf-banner--slim banner__start desktop-only',
         link: $config.theme.home.bannerA.link
@@ -215,7 +217,7 @@ export default {
         description:
             'This is an example of a banner for promoting a special product',
         buttonText: 'Shop now',
-        image: 'https://img.freepik.com/premium-photo/red-white-tablets-white-background-with-free-space_94046-8196.jpg?w=2000',
+        image: '/homepage/pills.png',
         class: 'sf-banner--slim banner-central desktop-only',
         link: $config.theme.home.bannerB.link
       },
@@ -355,6 +357,39 @@ export default {
         display: inline;
       
     }
+    @include for-desktop{
+       ::v-deep .sf-button.color-secondary{
+        margin-top: 15rem;
+      }
+        ::v-deep .sf-banner__description{
+        
+        font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      /* or 138% */
+
+
+      /* MainTextColour/Primary */
+
+      color: #1D1F22;
+
+      }
+        ::v-deep .sf-banner__subtitle{
+        padding-top: 5rem;
+        font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 22px;
+      /* identical to box height, or 138% */
+
+
+      /* Primary Grey */
+
+      color: #4A4444;
+
+            }
+    }
 
   }
   &__tshirt {
@@ -373,12 +408,40 @@ export default {
   }
   &-central {
     @include for-desktop {
-      ::v-deep .sf-banner{
-          width:10% !important;
-        }
       
+      ::v-deep .sf-button.color-secondary{
+        margin-top: 15rem;
+      }
+      ::v-deep .sf-banner__description{
+      
+        font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      /* or 138% */
+
+
+      /* MainTextColour/Primary */
+
+      color: #1D1F22;
+
+      }
+      ::v-deep .sf-banner__subtitle{
+        padding-top: 5rem;
+        font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 22px;
+      /* identical to box height, or 138% */
+
+
+      /* Primary Grey */
+
+      color: #4A4444;
+
+            }
       --banner-container-flex: 0 0 70%;
-             ::v-deep .sf-banner__title{
+        ::v-deep .sf-banner__title{
         font-style: normal;
         font-weight: 700;
         font-size: 30px;
@@ -458,6 +521,9 @@ margin-top: 6rem;
     }
     &__product {
       --product-card-add-button-transform: translate3d(0, 30%, 0);
+    }
+    :v-deep .sf-image--placeholder {
+      display: none;
     }
   }
   ::v-deep .sf-arrow--long .sf-arrow--right {

@@ -1,5 +1,60 @@
 <template>
   <div id="category">
+
+      <SfModal
+      
+      :visible="openModal"
+      :title="modalTitle"
+      @close="openModal = false"
+    >
+    <h5>Select the quantity</h5>
+    <p style="
+      font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      align-items: center;
+      color: #43464E;
+      background-color: aliceblue;
+          ">
+ACYCLOVIR 200 MG CAP 500
+    </p>
+    <p>16729-0015-17</p>
+    <p style="
+    font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+
+
+color: #C94166;
+    ">
+      ACCORD HEALTHCARE
+    </p>
+      <SfComponentSelect
+    label="Units"
+    selected=""
+    
+    :disabled="false"
+   
+    :persistent="false"
+    cancelLabel=""
+  >
+      <SfComponentSelectOption value="100" l>
+      <SfProductOption label="100" />
+    </SfComponentSelectOption>
+  </SfComponentSelect>
+    <button
+    class=" sf-button"
+    :aria-disabled="false"
+    :link="null"
+    type="button"
+    aria-label="button"
+    style="background: #6C227E;width:100%"
+  >
+    Add to card
+  </button>
+    </SfModal>
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
@@ -110,7 +165,8 @@
             :special-price="product.price.special"
             
             :show-add-to-cart-button="true"
-            
+            data-testid="open-modal-button"
+      @click="toggleModal"
             class="products__product-card"
             @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
             > 
@@ -386,13 +442,16 @@
             @click="clearAllFilters"
             >Clear all</SfButton
           >
+  
         </div>
       </template>
     </SfSidebar>
     </div>
+   
   </div>
   
 </template>
+
 <script>
 import {
   SfModal,
@@ -444,6 +503,7 @@ export default {
       isGridView: true,
       category: "Clothing",
       displayOnPage: "40",
+       openModal: false,
       sortByOptions: [
         {
           value: "Latest",
@@ -716,6 +776,9 @@ export default {
     };
   },
   methods: {
+       toggleModal() {
+      this.openModal = !this.openModal;
+    },
     clearAllFilters() {
       const filters = Object.keys(this.filters);
       filters.forEach((name) => {
@@ -734,6 +797,7 @@ export default {
       });
     },
   },
+  
 };
      
 </script>
