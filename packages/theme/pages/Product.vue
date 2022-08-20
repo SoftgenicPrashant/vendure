@@ -5,9 +5,7 @@
       :breadcrumbs="breadcrumbs"
     />
     <div class="product">
-      <LazyHydrate when-idle>
-        <SfGallery :images="productGallery" class="product__gallery" />
-      </LazyHydrate>
+     
 
       <div class="product__info">
         <div class="product__header">
@@ -69,6 +67,7 @@
             :canAddToCart="stock > 0"
             class="product__add-to-cart"
             @click="addToCart"
+           
           />
         </div>
 
@@ -392,9 +391,17 @@ export default {
     margin: 0 var(--spacer-2xs);
   }
   &__add-to-cart {
+    ::v-deep .sf-quantity-selector__button {
+      background:#fff !important;
+      color: #fff;
+    }
+    ::v-deep .sf-button{
+        background-color: #6c227e !important;
+      }
     margin: var(--spacer-base) var(--spacer-sm) 0;
     @include for-desktop {
       margin-top: var(--spacer-2xl);
+      
     }
   }
   &__guide,

@@ -69,7 +69,7 @@
           >
             <SfIcon
               :icon="accountIcon"
-              size="1.25rem"
+              size="2rem"
             />
           </SfButton>
           <SfButton
@@ -80,7 +80,7 @@
             <SfIcon
               class="sf-header__icon"
               icon="heart"
-              size="1.25rem"
+              size="2rem"
             />
             <SfBadge v-if="wishlistTotalItems" class="sf-badge--number cart-badge">{{wishlistTotalItems}}</SfBadge>
           </SfButton>
@@ -93,49 +93,13 @@
             <SfIcon
               class="sf-header__icon"
               icon="empty_cart"
-              size="1.25rem"
+              size="2rem"
             />
             <SfBadge v-if="cartTotalItems" class="sf-badge--number cart-badge">{{cartTotalItems}}</SfBadge>
           </SfButton>
         </div>
       </template>
-      <template #search>
-        <SfSearchBar
-          ref="searchBarRef"
-          :placeholder="$t('Search for items')"
-          :aria-label="$t('Search')"
-          class="sf-header__search"
-          :value="term"
-          @input="handleSearch"
-          @keydown.enter="handleSearch($event)"
-          @focus="isSearchOpen = true"
-          @keydown.esc="closeSearch"
-          v-click-outside="closeSearch"
-        >
-          <template #icon>
-            <SfButton
-              v-if="!!term"
-              aria-label="Close search"
-              class="sf-search-bar__button sf-button--pure"
-              @click="closeOrFocusSearchBar"
-            >
-              <span class="sf-search-bar__icon">
-                <SfIcon color="var(--c-text)" size="18px" icon="cross" />
-              </span>
-            </SfButton>
-            <SfButton
-              v-else
-              aria-label="Open search"
-              class="sf-search-bar__button sf-button--pure"
-              @click="isSearchOpen ? isSearchOpen = false : isSearchOpen = true"
-            >
-              <span class="sf-search-bar__icon">
-                <SfIcon color="var(--c-text)" size="20px" icon="search" />
-              </span>
-            </SfButton>
-          </template>
-        </SfSearchBar>
-      </template>
+
     </SfHeader>
     <SearchResults :visible="isSearchOpen" :result="result" @close="closeSearch" @removeSearchResults="removeSearchResults" />
     <SfOverlay :visible="isSearchOpen" />

@@ -1,483 +1,545 @@
 <template>
   <div id="category">
-
-      <SfModal
-      
-      :visible="openModal"
-      :title="modalTitle"
-      @close="openModal = false"
-    >
-    <h5>Select the quantity</h5>
-    <p style="
-      font-style: normal;
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 24px;
-      align-items: center;
-      color: #43464E;
-      background-color: aliceblue;
-          ">
-ACYCLOVIR 200 MG CAP 500
-    </p>
-    <p>16729-0015-17</p>
-    <p style="
-    font-style: normal;
-font-weight: 700;
-font-size: 16px;
-line-height: 24px;
-
-
-color: #C94166;
-    ">
-      ACCORD HEALTHCARE
-    </p>
-      <SfComponentSelect
-    label="Units"
-    selected=""
-    
-    :disabled="false"
-   
-    :persistent="false"
-    cancelLabel=""
-  >
-      <SfComponentSelectOption value="100" l>
-      <SfProductOption label="100" />
-    </SfComponentSelectOption>
-  </SfComponentSelect>
-    <button
-    class=" sf-button"
-    :aria-disabled="false"
-    :link="null"
-    type="button"
-    aria-label="button"
-    style="background: #6C227E;width:100%"
-  >
-    Add to card
-  </button>
-    </SfModal>
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
-        <SfHeading :level="1" title="Categories" class="navbar__title" />
-      </div>
-      <div class="navbar__main">
-        <SfButton
-          class="sf-button--text navbar__filters-button"
-          :aria-label="'Filters'"
-          @click="isFilterSidebarOpen = true"
-        >
-          <SfIcon
-            size="24px"
-            color="#43464E"
-            icon="filter2"
-            class="navbar__filters-icon"
+        <LazyHydrate never>
+          <SfHeading
+            :level="3"
+            :title="$t('Categories')"
+            class="navbar__title"
           />
-          Filters
-        </SfButton>
+        </LazyHydrate>
+      </div>
+
+      <div class="navbar__main">
+        <LazyHydrate on-interaction>
+          <SfButton
+            class="sf-button--text navbar__filters-button"
+            :aria-label="$t('Filters')"
+            @click="toggleFilterSidebar"
+          >
+            <SfIcon
+              size="24px"
+              color="dark-secondary"
+              icon="filter2"
+              class="navbar__filters-icon"
+            />
+            {{ $t('Filters') }}
+          </SfButton>
+        </LazyHydrate>
+
         <div class="navbar__sort desktop-only">
-          <span class="navbar__label">Sort by:</span>
-          <SfComponentSelect v-model="sortBy" class="navbar__select">
-            <SfComponentSelectOption
-              v-for="option in sortByOptions"
-              :key="option.value"
-              :value="option.value"
-              class="sort-by__option"
-              >{{ option.label }}</SfComponentSelectOption
+          <span class="navbar__label">{{ $t('Sort by') }}:</span>
+          <LazyHydrate on-interaction>
+            <SfSelect
+              :value="sortBy.selected"
+              :placeholder="$t('Select sorting')"
+              class="navbar__select"
+              @input="th.changeSorting"
             >
-          </SfComponentSelect>
+              <SfSelectOption
+                v-for="option in sortBy.options"
+                :key="option.id"
+                :value="option.id"
+                class="sort-by__option"
+                >{{ option.value }}</SfSelectOption
+              >
+            </SfSelect>
+          </LazyHydrate>
         </div>
+
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">Products found: </span>
-          <span class="desktop-only">280</span>
-          <span class="navbar__label smartphone-only">280 Items</span>
+          <span class="navbar__label desktop-only"
+            >{{ $t('Products found') }}:
+          </span>
+          <span class="desktop-only">{{ pagination.totalItems }}</span>
+          <span class="navbar__label smartphone-only"
+            >{{ pagination.totalItems }} {{ $t('Items') }}</span
+          >
         </div>
+
         <div class="navbar__view">
-          <span class="navbar__view-label desktop-only">View</span>
-          <SfButton
-            class="sf-button--pure navbar__view-button"
-            :aria-label="'Change to grid view'"
-            :aria-pressed="isGridView"
-            @click="isGridView = true"
-          >
-            <SfIcon
-              class="navbar__view-icon"
-              :color="'#43464E'"
-              icon="tiles"
-              size="12px"
-            />
-          </SfButton>
-          <SfButton
-            class="sf-button--pure navbar__view-button"
-            :aria-label="'Change to list view'"
-            :aria-pressed="!isGridView"
-            @click="isGridView = false"
-          >
-            <SfIcon
-              class="navbar__view-icon"
-              :color="'#43464E'"
-              icon="list"
-              size="12px"
-            />
-          </SfButton>
+          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
+          <SfIcon
+            v-e2e="'tiles-icon'"
+            class="navbar__view-icon"
+            :color="isCategoryGridView ? 'black' : 'dark-secondary'"
+            icon="tiles"
+            size="12px"
+            role="button"
+            :aria-label="$t('Change to grid view')"
+            :aria-pressed="isCategoryGridView"
+            @click="changeToCategoryGridView"
+          />
+          <SfIcon
+            v-e2e="'list-icon'"
+            class="navbar__view-icon"
+            :color="!isCategoryGridView ? 'black' : 'dark-secondary'"
+            icon="list"
+            size="12px"
+            role="button"
+            :aria-label="$t('Change to list view')"
+            :aria-pressed="!isCategoryGridView"
+            @click="changeToCategoryListView"
+          />
         </div>
       </div>
     </div>
+
     <div class="main section">
       <div class="sidebar desktop-only">
-        <SfAccordion :open="sidebarAccordion[0].header" :show-chevron="true">
-          <SfAccordionItem
-            v-for="(accordion, i) in sidebarAccordion"
-            :key="i"
-            :header="accordion.header"
+        <LazyHydrate when-idle>
+          <SfLoader
+            :class="{ 'loading--categories': loading }"
+            :loading="loading"
           >
-            <template>
-              <SfList class="list">
-                <SfListItem
-                  v-for="(item, j) in accordion.items"
-                  :key="j"
-                  class="list__item"
-                >
-                  <SfMenuItem :label="item.label" :count="item.count" />
-                </SfListItem>
-              </SfList>
-            </template>
-          </SfAccordionItem>
-        </SfAccordion>
+            <SfAccordion :open="activeCategory" :show-chevron="true">
+              <SfAccordionItem
+                v-for="(cat, i) in categoryTree && categoryTree"
+                :key="i"
+                :header="cat.label"
+              >
+                <template>
+                  <SfList class="list">
+                    <SfListItem class="list__item">
+                      <SfMenuItem :count="cat.count || ''" :label="cat.label">
+                        <template #label>
+                          <nuxt-link
+                            :to="localePath(th.getCatLink(cat))"
+                            :class="
+                              cat.isCurrent ? 'sidebar--cat-selected' : ''
+                            "
+                          >
+                            All
+                          </nuxt-link>
+                        </template>
+                      </SfMenuItem>
+                    </SfListItem>
+                    <SfListItem
+                      class="list__item"
+                      v-for="(subCat, j) in cat.items"
+                      :key="j"
+                    >
+                      <SfMenuItem
+                        :count="subCat.count || ''"
+                        :label="subCat.label"
+                      >
+                        <template #label="{ label }">
+                          <nuxt-link
+                            :to="localePath(th.getCatLink(subCat))"
+                            :class="
+                              subCat.isCurrent ? 'sidebar--cat-selected' : ''
+                            "
+                          >
+                            {{ label }}
+                          </nuxt-link>
+                        </template>
+                      </SfMenuItem>
+                    </SfListItem>
+                  </SfList>
+                </template>
+              </SfAccordionItem>
+            </SfAccordion>
+          </SfLoader>
+        </LazyHydrate>
       </div>
-      <div class="products">
-        <transition-group
-          v-if="isGridView"
-          appear
-          name="products__slide"
-          tag="div"
-          class="products__grid"
-        >
-          <SfProductCard
-            v-for="(product, i) in products"
-            :key="product.id"
-            :style="{ '--index': i }"
-            :title="product.title"
-           
-            :regular-price="product.price.regular"
-            :special-price="product.price.special"
-            
-            :show-add-to-cart-button="true"
-            data-testid="open-modal-button"
-      @click="toggleModal"
-            class="products__product-card"
-            @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
-            > 
-            {{`">
-            CUSTOM TITLE
-          `}}
-         </SfProductCard>
-
-        </transition-group>
-        <transition-group
-          v-else
-          appear
-          name="products__slide"
-          tag="div"
-          class="products__list"
-        >
-          <SfProductCardHorizontal
-            v-for="(product, i) in products"
-            :key="product.id"
-            :style="{ '--index': i }"
-            :title="product.title"
-            :description="product.description"
-            :regular-price="product.price.regular"
-            :special-price="product.price.special"
-            :is-in-wishlist="product.isInWishlist"
-            :image-height="200"
-            :image-width="140"
-
-            class="products__product-card-horizontal"
-            @click:wishlist="toggleWishlist(i)"
+      <SfLoader :class="{ loading }" :loading="loading">
+        <div class="products" v-if="!loading">
+          <transition-group
+            v-if="isCategoryGridView"
+            appear
+            name="products__slide"
+            tag="div"
+            class="products__grid"
           >
-            <template #configuration>
-              <SfProperty
-                class="desktop-only"
-                name="Unit"
-                value="100"
-                style="margin: 0 0 1rem 0"
-              />
-              <SfProperty class="desktop-only" name="Strength" value="100mg" />
-            </template>
-            <template #actions>
-              <SfButton
-                class="sf-button--text desktop-only"
-                style="margin: 0 0 1rem auto; display: block"
-                @click="$emit('click:add-to-wishlist')"
-              >
-                Save for later
-              </SfButton>
-              <SfButton
-                class="sf-button--text desktop-only"
-                style="margin: 0 0 0 auto; display: block"
-                @click="$emit('click:add-to-compare')"
-              >
-                Add to compare
-              </SfButton>
-            </template>
-          </SfProductCardHorizontal>
-        </transition-group>
-        <SfPagination
-          class="products__pagination"
-          :current="currentPage"
-          :total="4"
-          :visible="5"
-          @click="
-            (page) => {
-              currentPage = page;
-            }
-          "
-        />
-        <div class="products__show-on-page desktop-only">
-          <span class="products__show-on-page__label">Show on page:</span>
-          <SfSelect class="products__items-per-page">
-            <SfSelectOption
-              v-for="option in showOnPage"
-              :key="option"
-              :value="option"
-              class="products__items-per-page__option"
+            <SfProductCard
+              v-e2e="'category-product-card'"
+              v-for="(product, i) in products"
+              :key="productGetters.getSlug(product)"
+              :style="{ '--index': i }"
+              :title="productGetters.getName(product)"
+              :image="productGetters.getCoverImage(product)"
+              imageHeight="20.25rem"
+              imageWidth="100%"
+              :regular-price="
+                $n(productGetters.getPrice(product).regular, 'currency')
+              "
+              :max-rating="5"
+              :score-rating="productGetters.getAverageRating(product)"
+              :show-add-to-cart-button="true"
+              :isInWishlist="isInWishlist({ product })"
+              :isAddedToCart="isInCart({ product })"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
+              class="products__product-card"
+              @click:wishlist="
+                !isInWishlist({ product })
+                  ? addItemToWishlist({ product })
+                  : removeItemFromWishlist({ product })
+              "
+              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+            />
+          </transition-group>
+          <transition-group
+            v-else
+            appear
+            name="products__slide"
+            tag="div"
+            class="products__list"
+          >
+            <SfProductCardHorizontal
+              v-e2e="'category-product-card'"
+              v-for="(product, i) in products"
+              :key="productGetters.getSlug(product)"
+              :qty="itemQuantity"
+              :style="{ '--index': i }"
+              :title="productGetters.getName(product)"
+              :description="productGetters.getDescription(product)"
+              :image="productGetters.getCoverImage(product)"
+              :regular-price="
+                $n(productGetters.getPrice(product).regular, 'currency')
+              "
+              :max-rating="5"
+              :score-rating="3"
+              :isInWishlist="isInWishlist({ product })"
+              class="products__product-card-horizontal"
+              @input="productQuantity[product._id] = $event"
+              @click:wishlist="
+                !isInWishlist({ product })
+                  ? addItemToWishlist({ product })
+                  : removeItemFromWishlist({ product })
+              "
+              @click:add-to-cart="
+                addItemToCart({
+                  product,
+                  quantity:
+                    Number(productQuantity[product._id]) || itemQuantity,
+                })
+              "
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
             >
-              {{ option }}
-            </SfSelectOption>
-          </SfSelect>
-        </div>
-      </div>
-    </div>
-    <SfSidebar
-      :visible="isFilterSidebarOpen"
-      title="Filters"
-      class="sidebar-filters"
-      @close="isFilterSidebarOpen = false"
-    >
-      <div class="filters desktop-only">
-        <SfHeading
-          :level="4"
-          title="Brands"
-          class="filters__title sf-heading--left"
-        />
-        <SfFilter
-          v-for="filter in filters.collection"
-          :key="filter.value"
-          :label="filter.label"
-          :count="filter.count"
-          :selected="filter.selected"
-          class="filters__item"
-          @change="filter.selected = !filter.selected"
-        />
-        <SfHeading
-          :level="4"
-          title="Strength"
-          class="filters__title sf-heading--left"
-        />
-        <div class="filters__colors">
-          <SfColor
-            v-for="filter in filters.color"
-            :key="filter.value"
-            :color="filter.color"
-            :selected="filter.selected"
-            class="filters__color"
-            @click="filter.selected = !filter.selected"
-          />
-        </div>
-        <SfHeading
-          :level="4"
-          title="Size"
-          class="filters__title sf-heading--left"
-        />
-        <SfFilter
-          v-for="filter in filters.size"
-          :key="filter.value"
-          :label="filter.label"
-          :count="filter.count"
-          :selected="filter.selected"
-          class="filters__item"
-          @change="filter.selected = !filter.selected"
-        />
-        <SfHeading
-          :level="4"
-          title="Price"
-          class="filters__title sf-heading--left"
-        />
-        <SfFilter
-          v-for="filter in filters.price"
-          :key="filter.value"
-          :label="filter.label"
-          :count="filter.count"
-          :selected="filter.selected"
-          class="filters__item"
-          @change="filter.selected = !filter.selected"
-        />
-        <SfHeading
-          :level="4"
-          title="Material"
-          class="filters__title sf-heading--left"
-        />
-        <SfFilter
-          v-for="filter in filters.material"
-          :key="filter.value"
-          :value="filter.value"
-          :label="filter.label"
-          :selected="filter.selected"
-          class="filters__item"
-          @change="filter.selected = !filter.selected"
-        />
-      </div>
-      <SfAccordion class="filters smartphone-only">
-        <SfAccordionItem header="Show on page" class="filters__accordion-item">
-          <template #additional-info>
-            <span class="filters__chosen"> {{ displayOnPage }} items </span>
-          </template>
-          <SfRadio
-            v-for="value in showOnPage"
-            :key="value"
-            v-model="displayOnPage"
-            :value="value"
-            :label="value"
-            class="filters__item"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Sort by" class="filters__accordion-item">
-          <template #additional-info>
-            <span class="filters__chosen">
-              {{ sortBy }}
-            </span>
-          </template>
-          <SfRadio
-            v-for="sort in sortByOptions"
-            :key="sort.value"
-            v-model="sortBy"
-            :value="sort.value"
-            :label="sort.label"
-            class="filters__item"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Category" class="filters__accordion-item">
-          <template #additional-info>
-            <span class="filters__chosen">
-              {{ category }}
-            </span>
-          </template>
-          <SfRadio
-            v-for="cat in sidebarAccordion"
-            :key="cat.header"
-            v-model="category"
-            :value="cat.header"
-            :label="cat.header"
-            class="filters__item"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Collection" class="filters__accordion-item">
-          <SfFilter
-            v-for="filter in filters.collection"
-            :key="filter.value"
-            :label="filter.label"
-            :count="filter.count"
-            :selected="filter.selected"
-            class="filters__item"
-            @change="filter.selected = !filter.selected"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Color" class="filters__accordion-item">
-          <SfFilter
-            v-for="filter in filters.color"
-            :key="filter.value"
-            :label="filter.label"
-            :color="filter.color"
-            :selected="filter.selected"
-            class="filters__item"
-            @change="filter.selected = !filter.selected"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Size" class="filters__accordion-item">
-          <SfFilter
-            v-for="filter in filters.size"
-            :key="filter.value"
-            :label="filter.label"
-            :count="filter.count"
-            :selected="filter.selected"
-            class="filters__item"
-            @change="filter.selected = !filter.selected"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Price" class="filters__accordion-item">
-          <SfFilter
-            v-for="filter in filters.price"
-            :key="filter.value"
-            :label="filter.label"
-            :count="filter.count"
-            :selected="filter.selected"
-            class="filters__item"
-            @change="filter.selected = !filter.selected"
-          />
-        </SfAccordionItem>
-        <SfAccordionItem header="Material" class="filters__accordion-item">
-          <SfFilter
-            v-for="filter in filters.material"
-            :key="filter.value"
-            :value="filter.value"
-            :label="filter.label"
-            :selected="filter.selected"
-            class="filters__item"
-            @change="filter.selected = !filter.selected"
-          />
-        </SfAccordionItem>
-      </SfAccordion>
-      <template #content-bottom>
-        <div class="filters__buttons">
-          <SfButton
-            class="sf-button--full-width done"
-            @click="isFilterSidebarOpen = false"
-            >Done</SfButton
+              <template #configuration>
+                <SfProperty
+                  class="desktop-only"
+                  name="Size"
+                  value="XS"
+                  style="margin: 0 0 1rem 0"
+                />
+                <SfProperty class="desktop-only" name="Color" value="white" />
+              </template>
+              <template #actions>
+                <SfButton
+                  v-if="!isInWishlist({ product })"
+                  class="sf-button--text desktop-only"
+                  style="margin: 0 0 1rem auto; display: block"
+                  @click="addItemToWishlist({ product })"
+                >
+                  {{ $t('Save for later') }}
+                </SfButton>
+                <SfButton
+                  v-else
+                  class="sf-button--text desktop-only"
+                  style="margin: 0 0 1rem auto; display: block"
+                  @click="removeItemFromWishlist({ product })"
+                >
+                  {{ $t('Remove from wishlist') }}
+                </SfButton>
+              </template>
+            </SfProductCardHorizontal>
+          </transition-group>
+
+          <LazyHydrate on-interaction>
+            <SfPagination
+              v-if="!loading"
+              class="products__pagination desktop-only"
+              v-show="pagination.totalPages > 1"
+              :current="pagination.currentPage"
+              :total="pagination.totalPages"
+              :visible="5"
+            />
+          </LazyHydrate>
+
+          <div
+            v-show="pagination.totalPages > 1"
+            class="products__show-on-page"
           >
-          <SfButton
-            class="sf-button--full-width filters__button-clear"
-            @click="clearAllFilters"
-            >Clear all</SfButton
-          >
-  
+            <span class="products_show-on-page_label">{{
+              $t('Show on page')
+            }}</span>
+            <LazyHydrate on-interaction>
+              <SfSelect
+                :value="pagination.itemsPerPage.toString()"
+                class="products__items-per-page"
+                @input="th.changeItemsPerPage"
+              >
+                <SfSelectOption
+                  v-for="option in pagination.pageOptions"
+                  :key="option"
+                  :value="option"
+                  class="products_items-per-page_option"
+                >
+                  {{ option }}
+                </SfSelectOption>
+              </SfSelect>
+            </LazyHydrate>
+          </div>
         </div>
-      </template>
-    </SfSidebar>
+      </SfLoader>
     </div>
-   
+
+    <LazyHydrate when-idle>
+      <SfSidebar
+        :visible="isFilterSidebarOpen"
+        :title="$t('Filters')"
+        class="sidebar-filters"
+        @close="toggleFilterSidebar"
+      >
+        <div class="filters desktop-only">
+          <div v-for="(facet, i) in facets" :key="i">
+            <SfHeading
+              :level="4"
+              :title="facet.label"
+              class="filters__title sf-heading--left"
+              :key="`filter-title-${facet.id}`"
+            />
+            <div>
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.attrName}-${option.value}`"
+                :label="
+                  option.attrName +
+                  `${option.count ? ` (${option.count})` : ''}`
+                "
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </div>
+          </div>
+        </div>
+        <SfAccordion class="filters smartphone-only">
+          <div v-for="(facet, i) in facets" :key="i">
+            <SfAccordionItem
+              :key="`filter-title-${facet.id}`"
+              :header="facet.label"
+              class="filters__accordion-item"
+            >
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.id}-${option.id}`"
+                :label="option.attrName"
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </SfAccordionItem>
+          </div>
+        </SfAccordion>
+        <template #content-bottom>
+          <div class="filters__buttons">
+            <SfButton class="sf-button--full-width" @click="applyFilters" style="background: #6c227e">{{
+              $t('Done')
+            }}</SfButton>
+            <SfButton
+              class="sf-button--full-width filters__button-clear"
+              @click="clearFilters"
+              >{{ $t('Clear all') }}</SfButton
+            >
+          </div>
+        </template>
+      </SfSidebar>
+    </LazyHydrate>
   </div>
-  
 </template>
 
 <script>
 import {
-  SfModal,
-  SfHeading,
   SfSidebar,
   SfButton,
   SfList,
   SfIcon,
+  SfHeading,
   SfMenuItem,
   SfFilter,
   SfProductCard,
   SfProductCardHorizontal,
   SfPagination,
   SfAccordion,
-  SfComponentSelect,
+  SfSelect,
   SfBreadcrumbs,
+  SfLoader,
   SfColor,
   SfProperty,
-  SfRadio,
-  SfSelect,
-} from "@storefront-ui/vue";
+} from '@storefront-ui/vue';
+import { ref, computed, onMounted } from '@vue/composition-api';
+import {
+  useCart,
+  useWishlist,
+  productGetters,
+  useFacet,
+  facetGetters,
+} from '@vue-storefront/vendure';
+import { useUiHelpers, useUiState } from '~/composables';
+import { getTreeWithoutEmptyCategories } from '~/helpers';
+import { onSSR } from '@vue-storefront/core';
+import LazyHydrate from 'vue-lazy-hydration';
+import Vue from 'vue';
+// TODO(addToCart qty, horizontal): https://github.com/vuestorefront/storefront-ui/issues/1606
 export default {
-  name: "Category",
+  name: 'Category',
+  transition: 'fade',
+  setup(props, context) {
+    const productQuantity = ref({});
+    const itemQuantity = ref(1);
+    const th = useUiHelpers();
+    const uiState = useUiState();
+    const { addItem: addItemToCart, isInCart, cart } = useCart();
+    const {
+      addItem: addItemToWishlist,
+      isInWishlist,
+      removeItem: removeItemFromWishlist,
+    } = useWishlist();
+    const { result, search, loading } = useFacet();
+    const { changeFilters, isFacetColor } = useUiHelpers();
+    const { toggleFilterSidebar } = useUiState();
+    // TODO: Refactor this to work on path rather than slugs because slug params are undefined so we have to filter them.
+    const lastSlug = th.getLastSlugFromParams();
+    const searchResult = computed(() =>
+      facetGetters.getAgnosticSearchResult(result.value)
+    );
+    const sortBy = computed(() =>
+      facetGetters.getSortOptions(searchResult.value)
+    );
+    const facets = computed(() => facetGetters.getGrouped(searchResult.value));
+    const products = computed(() =>
+      facetGetters.getProducts(searchResult.value)
+    );
+    const rawBreadcrumbs = computed(() =>
+      facetGetters.getBreadcrumbsFromSlug(searchResult.value, lastSlug)
+    );
+    const breadcrumbs = computed(() =>
+      th.getFormattedBreadcrumbs(rawBreadcrumbs.value)
+    );
+    // TODO: Refactor this getter
+    const rawPagination = computed(() =>
+      facetGetters.getPagination(searchResult.value)
+    );
+    const pagination = computed(() => ({
+      page: parseInt(context.root.$route.query.page, 10) || 1,
+      ...rawPagination.value,
+    }));
+    // TODO: Refactor this getter
+    const rawCategoryTree = computed(() =>
+      searchResult.value?.data?.categories?.map((category) => {
+        const tree = facetGetters.getTree(category.collection);
+        tree.isCurrent = th.doesUrlIncludesCategory(tree.slug);
+        return tree;
+      })
+    );
+    const categoryTree = computed(() =>
+      getTreeWithoutEmptyCategories(rawCategoryTree.value)
+    );
+    const activeCategory = computed(() => {
+      const items = categoryTree.value;
+      if (!items || !items.length) {
+        return '';
+      }
+      const category = items.find(
+        ({ isCurrent, items }) =>
+          isCurrent || items.find(({ isCurrent }) => isCurrent)
+      );
+      return category?.label || items[0].label;
+    });
+    const selectedFilters = ref({});
+    const setSelectedFilters = () => {
+      if (!facets.value.length || Object.keys(selectedFilters.value).length)
+        return;
+      selectedFilters.value = facets.value.reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr.id]: curr.options.filter((o) => o.selected).map((o) => o.id),
+        }),
+        {}
+      );
+    };
+    onSSR(async () => {
+      await search({ ...th.getFacetsFromURL() });
+      setSelectedFilters();
+    });
+    onMounted(() => {
+      context.root.$scrollTo(context.root.$el, 2000);
+      setSelectedFilters();
+    });
+    const isFilterSelected = (facet, option) =>
+      (selectedFilters.value.attributes || []).includes(option.id);
+    const selectFilter = (facet, option) => {
+      if (!selectedFilters.value.attributes) {
+        Vue.set(selectedFilters.value, 'attributes', []);
+      }
+      if (selectedFilters.value?.attributes.find((f) => f === option.id)) {
+        const filterIndex = selectedFilters.value?.attributes.indexOf(
+          option.id
+        );
+        if (filterIndex > -1) {
+          selectedFilters.value?.attributes?.splice(filterIndex, 1);
+        }
+        return;
+      }
+      selectedFilters.value.attributes.push(option.id);
+    };
+    const clearFilters = () => {
+      toggleFilterSidebar();
+      selectedFilters.value = {};
+      changeFilters(selectedFilters.value);
+    };
+    const applyFilters = () => {
+      toggleFilterSidebar();
+      changeFilters(selectedFilters.value);
+    };
+    return {
+      ...uiState,
+      productQuantity,
+      th,
+      products,
+      categoryTree,
+      loading,
+      productGetters,
+      pagination,
+      activeCategory,
+      sortBy,
+      facets,
+      breadcrumbs,
+      addItemToWishlist,
+      removeItemFromWishlist,
+      isInWishlist,
+      addItemToCart,
+      isInCart,
+      isFacetColor,
+      selectFilter,
+      isFilterSelected,
+      selectedFilters,
+      clearFilters,
+      applyFilters,
+      cart,
+      itemQuantity,
+    };
+  },
   components: {
-    SfModal,
-    SfHeading,
     SfButton,
     SfSidebar,
     SfIcon,
@@ -488,322 +550,18 @@ export default {
     SfPagination,
     SfMenuItem,
     SfAccordion,
-    SfComponentSelect,
-    SfBreadcrumbs,
-    SfColor,
-    SfProperty,
-    SfRadio,
     SfSelect,
+    SfBreadcrumbs,
+    SfLoader,
+    SfColor,
+    SfHeading,
+    SfProperty,
+    LazyHydrate,
   },
-  data() {
-    return {
-      currentPage: 1,
-      sortBy: "Latest",
-      isFilterSidebarOpen: false,
-      isGridView: true,
-      category: "Clothing",
-      displayOnPage: "40",
-       openModal: false,
-      sortByOptions: [
-        {
-          value: "Latest",
-          label: "Latest",
-        },
-        {
-          value: "Price-up",
-          label: "Price from low to high",
-        },
-        {
-          value: "Price-down",
-          label: "Price from high to low",
-        },
-      ],
-      sidebarAccordion: [
-        {
-          header: "Pharmacueticals",
-          items: [
-            { label: "All", count: "280" },
-            { label: "Test Strips", count: "23" },
-            { label: "Injectables", count: "54" },
-            { label: "Pills", count: "34" },
-            { label: "Inhalants", count: "56" },
-            { label: "Gels", count: "7" },
-            { label: "Balms", count: "12" },
-             { label: "Lotions", count: "56" },
-          ],
-        },
-                {
-          header: "Packaging",
-          items: [
-            { label: "All", count: "280" },
-            { label: "Test Strips", count: "23" },
-            { label: "Injectables", count: "54" },
-            { label: "Pills", count: "34" },
-            { label: "Inhalants", count: "56" },
-            { label: "Gels", count: "7" },
-            { label: "Balms", count: "12" },
-             { label: "Lotions", count: "56" },
-          ],
-        },
- 
-          {
-          header: "Category 3",
-          items: [
-            { label: "All", count: "280" },
-            { label: "Test Strips", count: "23" },
-            { label: "Injectables", count: "54" },
-            { label: "Pills", count: "34" },
-            { label: "Inhalants", count: "56" },
-            { label: "Gels", count: "7" },
-            { label: "Balms", count: "12" },
-             { label: "Lotions", count: "56" },
-          ],
-        },
-                {
-          header: "Category 4",
-          items: [
-            { label: "All", count: "280" },
-            { label: "Test Strips", count: "23" },
-            { label: "Injectables", count: "54" },
-            { label: "Pills", count: "34" },
-            { label: "Inhalants", count: "56" },
-            { label: "Gels", count: "7" },
-            { label: "Balms", count: "12" },
-             { label: "Lotions", count: "56" },
-          ],
-        },
-      ],
-      showOnPage: ["20", "40", "60"],
-      products: [
-        {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 1,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-              {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 2,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-              {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 3,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-               {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 4,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-  
-        
-                       {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 5,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-                       {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 6,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-                       {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 7,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-                       {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 8,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
-                       {
-          title: "ACETAZOLAMIDE SOD 500 MG VIAL 1",
-          id: 9,
-          description:
-            "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
-          image: "assets/storybook/Home/productA.jpg",
-          price: { regular: "$50.00" },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true,
-
-        },
- 
-      ],
-      filters: {
-        collection: [
-          {
-            label: "Brand 1",
-            value: "Brand 1",
-            count: "10",
-            selected: false,
-          },
-          {
-            label: "Brand 2",
-            value: "Brand 2",
-            count: "23",
-            selected: false,
-          },
-          {
-            label: "Brand 3",
-            value: "Brand 3",
-            count: "54",
-            selected: false,
-          },
-        ],
-        color: [
-          { label: "Red", value: "red", color: "#990611", selected: false },
-          { label: "Black", value: "black", color: "#000000", selected: false },
-          {
-            label: "Yellow",
-            value: "yellow",
-            color: "#DCA742",
-            selected: false,
-          },
-          { label: "Blue", value: "blue", color: "#004F97", selected: false },
-          { label: "Navy", value: "navy", color: "#656466", selected: false },
-        ],
-        size: [
-          { label: "Size 2 (XXS)", value: "xxs", count: "10", selected: false },
-          { label: "Size 4-6 (XS)", value: "xs", count: "23", selected: false },
-          { label: "Size 8-10 (S)", value: "s", count: "54", selected: false },
-          {
-            label: "Size 12-14 (M)",
-            value: "m",
-            count: "109",
-            selected: false,
-          },
-          { label: "Size 16-18 (L)", value: "l", count: "23", selected: false },
-          {
-            label: "Size 20-22(XL)",
-            value: "xl",
-            count: "12",
-            selected: false,
-          },
-          {
-            label: "Size 24-26 (XXL)",
-            value: "xxl",
-            count: "2",
-            selected: false,
-          },
-        ],
-        price: [
-          {
-            label: "Under $200",
-            value: "under-200",
-            count: "23",
-            selected: false,
-          },
-          {
-            label: "Under $300",
-            value: "under-300",
-            count: "54",
-            selected: false,
-          },
-        ],
-        material: [
-          { label: "Cotton", value: "coton", count: "33", selected: false },
-          { label: "Silk", value: "silk", count: "73", selected: false },
-        ],
-      },
-      breadcrumbs: [
-        {
-          text: "Home",
-          link: "#",
-        },
-        {
-          text: "Women",
-          link: "#",
-        },
-      ],
-    };
-  },
-  methods: {
-       toggleModal() {
-      this.openModal = !this.openModal;
-    },
-    clearAllFilters() {
-      const filters = Object.keys(this.filters);
-      filters.forEach((name) => {
-        const prop = this.filters[name];
-        prop.forEach((value) => {
-          value.selected = false;
-        });
-      });
-    },
-    toggleWishlist(index) {
-      this.products[index].isInWishlist = !this.products[index].isInWishlist;
-    },
-    handleSelectedColor(color, index) {
-      this.products[index].colors.map((el) => {
-        el.selected = el.label === color.label ? !el.selected : false;
-      });
-    },
-  },
-  
 };
-     
 </script>
-
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 #category {
   box-sizing: border-box;
   @include for-desktop {
@@ -970,30 +728,29 @@ export default {
   border: 1px solid var(--c-light);
   border-width: 0 1px 0 0;
 }
-.sidebar{
-  @include for-desktop{
+.sidebar {
+  @include for-desktop {
     ::v-deep .sf-accordion-item__header.is-open {
-    --accordion-item-header-border-width: 0;
-    --accordion-item-header-color: #6C227E!important;
-    --chevron-color: #6C227E!important;
-    font-style: normal;
+      --accordion-item-header-border-width: 0;
+      --accordion-item-header-color: #6c227e !important;
+      --chevron-color: #6c227e !important;
+      font-style: normal;
       font-weight: 500;
       font-size: 18px;
       line-height: 24px;
-}
-::v-deep .sf-accordion-item__header{
-  font-style: normal;
-font-weight: 500;
-font-size: 18px;
-line-height: 24px;
-}
-::v-deep .sf-menu-item__label{
-  font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-}
-
+    }
+    ::v-deep .sf-accordion-item__header {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 24px;
+    }
+    ::v-deep .sf-menu-item__label {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+    }
   }
 }
 .sidebar-filters {
@@ -1002,8 +759,6 @@ line-height: 24px;
   @include for-desktop {
     --sidebar-content-padding: 0 var(--spacer-xl);
     --sidebar-bottom-padding: 0 var(--spacer-xl);
-
-
   }
 }
 
@@ -1016,7 +771,6 @@ line-height: 24px;
   }
 }
 .products {
-  
   box-sizing: border-box;
   flex: 1;
   margin: 0;
@@ -1033,51 +787,50 @@ line-height: 24px;
   }
   &__product-card {
     background: rgba(255, 255, 255, 0.15);
-border: 1px solid rgba(137, 94, 206, 0.3);
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.07);
-border-radius: 8px;
-padding-top: 0;
+    border: 1px solid rgba(137, 94, 206, 0.3);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.07);
+    border-radius: 8px;
+    padding-top: 0;
     --product-card-max-width: 6rem;
     --product-card-title-margin: var(--spacer-2xs) 0 0 0;
     --price-regular-font-line-height: 1;
     margin-bottom: var(--spacer-sm);
     ::v-deep .sf-product-card__price {
       margin: var(--spacer-2xs) 0 var(--spacer-xs);
-    
-      }
-        @include for-desktop{
-         ::v-deep .sf-product-card__title{
-          font-style: normal;
-      font-weight: 600;
-      font-size: 12px;
-      line-height: 24px;
-      background-color: rgb(230, 246, 252);
-     }
     }
- 
+    @include for-desktop {
+      ::v-deep .sf-product-card__title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 24px;
+        background-color: rgb(230, 246, 252);
+      }
+    }
+
     flex: 1 1 50%;
     @include for-desktop {
       margin-bottom: 10px;
-     
+
       height: 135px;
       --product-card-max-width: 24.5%;
       --product-card-title-margin: var(--spacer-base) 0 0 0;
-    
-      ::v-deep .sf-image--placeholder{
-  display: none !important;
-}
-::v-deep .sf-image {
-  display: none;
-}
-   ::v-deep .sf-product-card__add-button {
-     top: 4rem !important;
-     z-index: 1;
-     background: #6C5B71;
-    }
-    ::v-deep .sf-product-card__wishlist-icon{
-      margin-top: 0;
-      bottom: 6rem;
-    }
+
+      ::v-deep .sf-image--placeholder {
+        display: none !important;
+      }
+      ::v-deep .sf-image {
+        display: none;
+      }
+      ::v-deep .sf-product-card__add-button {
+        top: 4rem !important;
+        z-index: 1;
+        background: #6c5b71;
+      }
+      ::v-deep .sf-product-card__wishlist-icon {
+        margin-top: 0;
+        bottom: 6rem;
+      }
     }
   }
   &__product-card-horizontal {
@@ -1088,7 +841,6 @@ padding-top: 0;
         width: 1.5rem;
         height: 1.5rem;
       }
-   
     }
   }
   &__slide-enter {
@@ -1105,15 +857,15 @@ padding-top: 0;
     margin: var(--spacer-base) 0;
   }
   @include for-desktop {
-   ::v-deep .sf-image--placeholder{
-        display: none;
-      }
-      ::v-deep .sf-image{
-        display: none;
-      }
-      ::v-deep .sf-add-to-cart__button {
-        background-color: #6C227E;
-      }
+    ::v-deep .sf-image--placeholder {
+      display: none;
+    }
+    ::v-deep .sf-image {
+      display: none;
+    }
+    ::v-deep .sf-add-to-cart__button {
+      background-color: #6c227e;
+    }
     margin: var(--spacer-sm) 0 0 var(--spacer-sm);
     &__pagination {
       justify-content: flex-start;
@@ -1121,7 +873,6 @@ padding-top: 0;
     }
     &__product-card-horizontal {
       margin: var(--spacer-lg) 0;
-      
     }
     &__product-card {
       flex: 1 1 25%;
@@ -1129,7 +880,6 @@ padding-top: 0;
     &__list {
       margin: 0 0 0 var(--spacer-sm);
     }
-
   }
   &__show-on-page {
     display: flex;
@@ -1142,7 +892,6 @@ padding-top: 0;
   }
 }
 .filters {
-
   &__title {
     --heading-title-font-size: var(--font-size--xl);
     margin: var(--spacer-xl) 0 var(--spacer-base) 0;
@@ -1179,12 +928,9 @@ padding-top: 0;
       margin: var(--spacer-sm) 0;
       border: 0;
       padding: 0;
-    
     }
-     
-  
   }
-  
+
   &__accordion-item {
     --accordion-item-content-padding: 0;
     position: relative;
@@ -1196,7 +942,6 @@ padding-top: 0;
   }
   &__buttons {
     margin: var(--spacer-sm) 0;
-    
   }
   &__button-clear {
     --button-background: var(--c-light);
@@ -1204,11 +949,10 @@ padding-top: 0;
     margin: var(--spacer-xs) 0 0 0;
   }
 }
-  ::v-deep .sf-sidebar__circle-icon{
-      background-color: #6C227E;
-    }
-::v-deep .done{
-   background-color: #6C227E;
+::v-deep .sf-sidebar__circle-icon {
+  background-color: #6c227e;
 }
-
+::v-deep .done {
+  background-color: #6c227e;
+}
 </style>
